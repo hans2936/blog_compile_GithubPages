@@ -1,0 +1,75 @@
+<article id="<%= post.layout %>-<%= post.slug %>" class="article article-type-<%= post.layout %>" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <%- partial('post/date', {class_name: 'article-date', date_format: null}) %>
+    <%- partial('post/category') %>
+  </div>
+  <div class="article-inner">
+    <%- partial('post/gallery') %>
+    <% if (post.link || post.title){ %>
+      <header class="article-header">
+        <%- partial('post/title', {class_name: 'article-title'}) %>
+      </header>
+    <% } %>
+    <div class="article-entry" itemprop="articleBody">
+      <% if (post.excerpt && index){ %>
+        <%- post.excerpt %>
+        <% if (theme.excerpt_link){ %>
+          <p class="article-more-link">
+            <!-- <a href="<%- url_for(post.path) %>#more"><%= theme.excerpt_link %></a> -->
+	    <a href="<%- url_for(post.path) %>"><%= theme.excerpt_link %></a>
+          </p>
+        <% } %>
+      <% } else { %>
+        <%- post.content %>
+      <% } %>
+    </div>
+    <footer class="article-footer">
+      <a data-url="<%- post.permalink %>" data-id="<%= post._id %>" class="article-share-link"><%= __('分享') %></a>
+      <% if (post.comments){ %>
+	<a href="<%- post.permalink %>#gitalk-container" class="article-comment-link"><%= __('评论') %></a>
+      <% } %>
+      <%- partial('post/tag') %>
+    </footer>
+  </div>
+  <% if (!index){ %>
+    <%- partial('post/nav') %>
+  <% } %>
+</article>
+
+<% if (!index && post.comments && 0){ %>
+  <section id="comments">
+  <div id="gitment"></div>
+      <script>
+      const gitment = new Gitment({
+        id: '<%= post.date %>',
+        owner: 'hans2936',
+        repo: 'hans2936.github.io',
+        oauth: {
+        client_id: '3e8c534985cee5b9549d',
+        client_secret: '292ef9d120bfb7ed9b61b0455a52c8c61737250c',
+        },
+      })
+      gitment.render('gitment')
+      </script>
+</section>
+<% } %>
+
+<% if (!index && post.comments){ %>
+  <section id="comments">
+  <div id="gitalk-container"></div>
+      <script>
+      var gitalk = new Gitalk({
+      clientID: '3e8c534985cee5b9549d',
+      clientSecret: '292ef9d120bfb7ed9b61b0455a52c8c61737250c',
+      repo: 'hans2936.github.io',
+      owner: 'hans2936',
+      admin: ['hans2936'],
+      id: '<%= post.date %>',      
+      distractionFreeMode: false,
+      language: 'zh-CN'
+    })
+   gitalk.render('gitalk-container')
+      </script>
+</section>
+<% } %>
+
